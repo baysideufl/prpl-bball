@@ -20,7 +20,7 @@ class GamesController extends \BaseController {
 	 * @return Response
 	 */
 	public function create()
-	{
+	{		
 		return View::make('games.create');
 	}
 
@@ -40,7 +40,7 @@ class GamesController extends \BaseController {
 
 		Game::create($data);
 
-		return Redirect::route('games.index');
+		return Redirect::route('games.index')->with('message', 'Game Created!');
 	}
 
 	/**
@@ -88,7 +88,7 @@ class GamesController extends \BaseController {
 
 		$game->update($data);
 
-		return Redirect::route('games.index');
+		return Redirect::route('games.show', $id)->with('message','Game Updated!');
 	}
 
 	/**
@@ -101,7 +101,7 @@ class GamesController extends \BaseController {
 	{
 		Game::destroy($id);
 
-		return Redirect::route('games.index');
+		return Redirect::route('games.index')->with('message', 'Game Removed!');
 	}
 
 }

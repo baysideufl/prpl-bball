@@ -17,12 +17,16 @@ class GamesTableSeeder extends Seeder {
 		{
 			Game::create(
 			array(
+				'id' => $index,
 				'title' => "Event $index",
 				'location' => "Somewhere",
 				'date' => $date,
 				'min_to_play' => "2",
 				'max_per_team' => "5",
-				'cutoff_time' => $cutoff
+				'cutoff_time' => $cutoff,
+				'created_at' => new DateTime, 
+				'updated_at' => new DateTime,
+				'notification_sent' => "0"
 				)
 			);
 			$date->add(new DateInterval('P1D'));

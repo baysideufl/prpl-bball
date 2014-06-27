@@ -7,11 +7,11 @@ class AttendeesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function index()
+	public function index($game)
 	{
 		$attendees = Attendee::all();
 
-		return View::make('attendees.index', compact('attendees'));
+		return View::make('attendees.index', compact('game'));
 	}
 
 	/**
@@ -19,9 +19,11 @@ class AttendeesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function create()
+	public function create($id)
 	{
-		return View::make('attendees.create');
+		$game = Game::find($id);
+
+		return View::make('attendees.create', compact('game'));
 	}
 
 	/**
@@ -29,7 +31,7 @@ class AttendeesController extends \BaseController {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store($id)
 	{
 		$validator = Validator::make($data = Input::all(), Attendee::$rules);
 
@@ -40,7 +42,13 @@ class AttendeesController extends \BaseController {
 
 		Attendee::create($data);
 
-		return Redirect::route('attendees.index');
+		$game = Game::find($id);
+		$message = "Attendee Added!";
+		if( Attendee::isHappening($game) ){
+			$message .= "<br>" . Attendee::sendNotifications($game);
+		}
+
+		return Redirect::route('games.show', $game->id)->with('message', $message);
 	}
 
 	/**
@@ -49,11 +57,11 @@ class AttendeesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($game, $attendee)
 	{
-		$attendee = Attendee::findOrFail($id);
+		$attendee = Attendee::findOrFail($attendee);
 
-		return View::make('attendees.show', compact('attendee'));
+		return View::make('attendees.show', compact('game','attendee'));
 	}
 
 	/**
@@ -62,11 +70,11 @@ class AttendeesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit($id)
+	public function edit($game, $attendee)
 	{
-		$attendee = Attendee::find($id);
+		$attendee = Attendee::find($attendee);
 
-		return View::make('attendees.edit', compact('attendee'));
+		return View::make('attendees.edit', compact('game','attendee'));
 	}
 
 	/**
@@ -75,9 +83,9 @@ class AttendeesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update($id)
+	public function update($game, $attendee)
 	{
-		$attendee = Attendee::findOrFail($id);
+		$attendee = Attendee::findOrFail($attendee);
 
 		$validator = Validator::make($data = Input::all(), Attendee::$rules);
 
@@ -88,7 +96,7 @@ class AttendeesController extends \BaseController {
 
 		$attendee->update($data);
 
-		return Redirect::route('attendees.index');
+		return Redirect::route('games.show')->with('message', 'Attendee Updated!');
 	}
 
 	/**
@@ -97,11 +105,15 @@ class AttendeesController extends \BaseController {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy($id)
+	public function destroy($game, $attendee)
 	{
-		Attendee::destroy($id);
+		Attendee::destroy($attendee);
 
-		return Redirect::route('attendees.index');
+		return Redirect::route('games.show', $game);
 	}
+
+
+
+
 
 }

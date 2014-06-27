@@ -11,10 +11,14 @@
 |
 */
 
+// Route Model Binding
+// Route::model('games', 'Game');
+// Route::model('attendees', 'Attendee');
+
 Route::get('/', function()
 {
 	return View::make('hello');
 });
 
 Route::resource('games', 'GamesController');
-Route::resource('attendees', 'AttendeesController');
+Route::resource('games.attendees', 'AttendeesController');

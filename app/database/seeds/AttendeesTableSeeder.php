@@ -7,13 +7,23 @@ class AttendeesTableSeeder extends Seeder {
 
 	public function run()
 	{
-		$faker = Faker::create();
+		DB::table('attendees')->delete();
 
-		foreach(range(1, 10) as $index)
+		foreach(range(1, 30) as $index)
 		{
-			Attendee::create([
-
-			]);
+			$id =	rand(1,10);
+			Attendee::create(
+			array(
+				'id' => $index,
+				'game_id' => $id,
+				'name' => "Attendee $index",
+				'email' => "member@example.com",
+				'phone' => "5555555555",
+				'carrier' => "verizon",
+				'created_at' => new DateTime, 
+				'updated_at' => new DateTime
+				)
+			);
 		}
 	}
 
