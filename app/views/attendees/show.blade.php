@@ -1,0 +1,1 @@
+/Users/bayside/Sites/Projects/prpl-bball/app/views/attendees/show.blade.php
